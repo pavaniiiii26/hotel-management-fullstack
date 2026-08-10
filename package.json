@@ -4,7 +4,7 @@
   "description": "learning nodejs",
   "license": "ISC",
   "author": "Pavani Patel",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "node server.js",
