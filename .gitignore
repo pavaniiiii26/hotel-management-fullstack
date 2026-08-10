@@ -1,2 +1,24 @@
+# Dependencies
 node_modules/
+
+# Production builds
+dist/
+dist-ssr/
+build/
+
+# Environment & local variables
 .env
+.env*.local
+
+# Logs
+*.log
+logs/
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp

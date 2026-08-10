@@ -2,7 +2,10 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import express from 'express';
+const app = express();
+
 import helmet from 'helmet';
+import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 
 import db from './db.js';
@@ -21,7 +24,13 @@ REQUIRED_ENV.forEach((key) => {
   }
 });
 
-const app = express();
+
+
+// CORS — allow React dev server
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 
 // Security headers
 app.use(helmet());
