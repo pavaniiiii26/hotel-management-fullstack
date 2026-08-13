@@ -1,7 +1,6 @@
 import express from 'express';
 import Menu from '../models/menu.js';
-import { jwtAuthMiddleware } from '../jwt.js';
-import Person from '../models/person.js';
+import { jwtAuthMiddleware, isManager } from '../jwt.js';
 import multer from 'multer';
 
 const storage = multer.memoryStorage(); // Store files in memory for simplicity
@@ -10,30 +9,36 @@ const upload = multer({ storage });
 
 const router = express.Router();
 
-// Middleware: only allows managers to proceed
-const managerOnly = async (req, res, next) => {
-  try {
-    const person = await Person.findById(req.user.id);
-    if (!person || person.work !== 'manager') {
-      return res.status(403).json({ error: 'Access denied. Managers only.' });
-    }
-    next();
-  } catch (err) {
-    next(err);
-  }
-};
-
 // POST /menu — Add a new menu item (managers only)
-router.post('/', jwtAuthMiddleware, managerOnly, upload.single('photo'), async (req, res, next) => {
+router.post('/', jwtAuthMiddleware, isManager, upload.single('photo'), async (req, res, next) => {
   try {
-    const newMenu = new Menu(req.body);
-    const savedMenu = await newMenu.save();
-    
-    const photoBase64 = req.file ? req.file.buffer.toString('base64') : null;
-    if (photoBase64) {
-      savedMenu.photo = `data:${req.file.mimetype};base64,${photoBase64}`;
-      await savedMenu.save();
+    const { name, price, taste } = req.body;
+    let ingredients = req.body.ingredients;
+
+    if (!ingredients && req.body['ingredients[]']) {
+      ingredients = Array.isArray(req.body['ingredients[]'])
+        ? req.body['ingredients[]']
+        : [req.body['ingredients[]']];
+    } else if (typeof ingredients === 'string') {
+      ingredients = ingredients.split(',').map((ing) => ing.trim()).filter(Boolean);
     }
+
+    const is_drink = req.body.is_drink === 'true' || req.body.is_drink === true;
+
+    const photoBase64 = req.file ? req.file.buffer.toString('base64') : null;
+    const photo = photoBase64 ? `data:${req.file.mimetype};base64,${photoBase64}` : req.body.photo;
+
+    const menuData = {
+      name,
+      price: Number(price),
+      taste,
+      is_drink,
+      ...(ingredients ? { ingredients } : {}),
+      ...(photo ? { photo } : {})
+    };
+
+    const newMenu = new Menu(menuData);
+    const savedMenu = await newMenu.save();
 
     res.status(201).json(savedMenu);
   } catch (err) {
@@ -89,7 +94,7 @@ router.get('/:taste', async (req, res, next) => {
 });
 
 // DELETE /menu/:id — Delete a menu item (managers only)
-router.delete('/:id', jwtAuthMiddleware, managerOnly, async (req, res, next) => {
+router.delete('/:id', jwtAuthMiddleware, isManager, async (req, res, next) => {
   try {
     const deleted = await Menu.findByIdAndDelete(req.params.id);
 

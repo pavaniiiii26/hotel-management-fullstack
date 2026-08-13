@@ -17,7 +17,8 @@ const authLimiter = rateLimit({
 // POST /person/signup
 router.post('/signup', authLimiter, async (req, res, next) => {
   try {
-    const newPerson = new Person(req.body);
+    const role = (req.body.role === 'manager' || req.body.work === 'manager') ? 'manager' : 'staff';
+    const newPerson = new Person({ ...req.body, role });
     const savedPerson = await newPerson.save();
     const token = generateToken(savedPerson);
     res.status(201).json({ token });
@@ -117,6 +118,7 @@ router.get('/:work', async (req, res, next) => {
 router.put('/profile/update', jwtAuthMiddleware, async (req, res, next) => {
   try {
     const updates = { ...req.body };
+    delete updates.role;
 
     // If the user is trying to change their password, hash it manually
     // because findByIdAndUpdate bypasses the pre('save') hook

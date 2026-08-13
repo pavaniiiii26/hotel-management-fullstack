@@ -12,6 +12,7 @@ export default function SignupPage() {
     password: '',
     age: '',
     work: '',
+    role: 'staff',
     mobile: '',
     salary: '',
     address: '',
@@ -31,6 +32,7 @@ export default function SignupPage() {
     try {
       const payload = {
         ...form,
+        role: form.role === 'manager' ? 'manager' : 'staff',
         age: form.age ? Number(form.age) : undefined,
         salary: Number(form.salary),
       };
@@ -44,167 +46,173 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="auth-page">
-      <div className="auth-card animate-in" style={{ maxWidth: '520px' }}>
-        <h1>Create Account</h1>
-        <p className="auth-subtitle">Join the team and get started</p>
+    <div className="section-container" style={{ maxWidth: '560px' }}>
+      <div className="editorial-header" style={{ marginBottom: '32px' }}>
+        <h1>CREATE ACCOUNT</h1>
+        <p>Register as a chef, waiter, or manager at Zesty</p>
+      </div>
 
+      <div className="editorial-card" style={{ padding: '36px', background: 'var(--bg-cream)' }}>
         {error && (
-          <div className="alert alert-error" id="signup-error">
+          <div style={{ background: 'rgba(214, 164, 156, 0.2)', border: '1px solid var(--accent-rose)', color: '#8f3b33', padding: '12px 16px', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '24px' }}>
             ⚠️ {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} id="signup-form">
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="name">Full Name</label>
+        <form onSubmit={handleSubmit}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+                Full Name
+              </label>
               <input
                 type="text"
-                id="name"
                 name="name"
-                className="form-input"
-                placeholder="John Doe"
+                placeholder="Pavani Patel"
                 value={form.name}
                 onChange={handleChange}
                 required
+                style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.9rem' }}
               />
             </div>
-            <div className="form-group">
-              <label htmlFor="signup-username">Username</label>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+                Username
+              </label>
               <input
                 type="text"
-                id="signup-username"
                 name="username"
-                className="form-input"
-                placeholder="johndoe"
+                placeholder="pavanipatel"
                 value={form.username}
                 onChange={handleChange}
                 required
-                minLength={3}
+                style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.9rem' }}
               />
             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="signup-email">Email</label>
+          <div style={{ marginBottom: '16px' }}>
+            <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+              Email Address
+            </label>
             <input
               type="email"
-              id="signup-email"
               name="email"
-              className="form-input"
-              placeholder="john@hotel.com"
+              placeholder="pavani@zesty.com"
               value={form.email}
               onChange={handleChange}
               required
+              style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.9rem' }}
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="signup-password">Password</label>
+          <div style={{ marginBottom: '16px' }}>
+            <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+              Password
+            </label>
             <input
               type="password"
-              id="signup-password"
               name="password"
-              className="form-input"
               placeholder="Min 6 characters"
               value={form.password}
               onChange={handleChange}
               required
-              minLength={6}
+              style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.9rem' }}
             />
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="work">Role</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '16px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+                Work Title
+              </label>
               <select
-                id="work"
                 name="work"
-                className="form-input"
                 value={form.work}
                 onChange={handleChange}
                 required
+                style={{ width: '100%', padding: '12px 12px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.85rem' }}
               >
-                <option value="">Select role</option>
+                <option value="">Select Work</option>
                 <option value="chef">Chef</option>
                 <option value="waiter">Waiter</option>
                 <option value="manager">Manager</option>
               </select>
             </div>
-            <div className="form-group">
-              <label htmlFor="age">Age</label>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+                System Role
+              </label>
+              <select
+                name="role"
+                value={form.role}
+                onChange={handleChange}
+                style={{ width: '100%', padding: '12px 12px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.85rem' }}
+              >
+                <option value="staff">Staff (Default)</option>
+                <option value="manager">Manager</option>
+              </select>
+            </div>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+                Age
+              </label>
               <input
                 type="number"
-                id="age"
                 name="age"
-                className="form-input"
                 placeholder="25"
                 value={form.age}
                 onChange={handleChange}
                 min={18}
                 max={80}
+                style={{ width: '100%', padding: '12px 12px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.85rem' }}
               />
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="mobile">Mobile (10 digits)</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+                Mobile Number
+              </label>
               <input
                 type="text"
-                id="mobile"
                 name="mobile"
-                className="form-input"
                 placeholder="9876543210"
                 value={form.mobile}
                 onChange={handleChange}
                 required
-                pattern="\d{10}"
+                style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.9rem' }}
               />
             </div>
-            <div className="form-group">
-              <label htmlFor="salary">Salary (₹)</label>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+                Salary ($/₹)
+              </label>
               <input
                 type="number"
-                id="salary"
                 name="salary"
-                className="form-input"
-                placeholder="30000"
+                placeholder="45000"
                 value={form.salary}
                 onChange={handleChange}
                 required
-                min={0}
+                style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.9rem' }}
               />
             </div>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="address">Address (optional)</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              className="form-input"
-              placeholder="123 Main St, City"
-              value={form.address}
-              onChange={handleChange}
-            />
           </div>
 
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn-pill-solid"
             disabled={loading}
-            id="signup-submit"
-            style={{ width: '100%' }}
+            style={{ width: '100%', padding: '14px', cursor: 'pointer' }}
           >
-            {loading ? 'Creating account...' : 'Create Account'}
+            {loading ? 'REGISTERING...' : 'REGISTER ACCOUNT'}
           </button>
         </form>
 
-        <div className="auth-footer">
-          Already have an account? <Link to="/login">Sign in</Link>
+        <div style={{ textAlign: 'center', marginTop: '24px', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+          Already have an account? <Link to="/login" style={{ color: 'var(--text-dark)', fontWeight: '600' }}>Sign in</Link>
         </div>
       </div>
     </div>

@@ -23,12 +23,23 @@ const jwtAuthMiddleware = (req, res, next) => {
   }
 };
 
+// Middleware to check if logged-in user is a manager
+const isManager = (req, res, next) => {
+  if (!req.user || (req.user.role !== 'manager' && req.user.work !== 'manager')) {
+    return res.status(403).json({ error: 'Access denied. Managers only.' });
+  }
+  next();
+};
+
 // Function to generate JWT token
 const generateToken = (user) => {
+  const userRole = (user.role === 'manager' || user.work === 'manager') ? 'manager' : (user.role || 'staff');
   return jwt.sign(
     {
       id: user._id,
-      username: user.username
+      username: user.username,
+      role: userRole,
+      work: user.work
     },
     process.env.JWT_SECRET,
     {
@@ -37,4 +48,4 @@ const generateToken = (user) => {
   );
 };
 
-export { jwtAuthMiddleware, generateToken };
+export { jwtAuthMiddleware, isManager, generateToken };

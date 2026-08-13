@@ -7,6 +7,7 @@ export default defineConfig({
     proxy: {
       '/person': 'http://localhost:3000',
       '/menu': 'http://localhost:3000',
+      '/order': 'http://localhost:3000',
     }
   }
 })

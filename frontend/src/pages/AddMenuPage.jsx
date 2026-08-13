@@ -58,60 +58,63 @@ export default function AddMenuPage() {
   };
 
   return (
-    <div className="page-container">
-      <div className="page-header animate-in">
-        <h1>Add Menu Item</h1>
-        <p>Create a new dish or drink for the menu</p>
+    <div className="section-container" style={{ maxWidth: '560px', margin: '0 auto' }}>
+      <div className="editorial-header" style={{ marginBottom: '32px' }}>
+        <h1>ADD MENU ITEM</h1>
+        <p>Create & publish a new culinary dish or drink for the menu</p>
       </div>
 
-      <div className="glass-card animate-in stagger-1" style={{ maxWidth: '600px' }}>
+      <div className="editorial-card" style={{ padding: '36px', background: 'var(--bg-cream)' }}>
         {error && (
-          <div className="alert alert-error" id="add-menu-error">
+          <div style={{ background: 'rgba(214, 164, 156, 0.2)', border: '1px solid var(--accent-rose)', color: '#8f3b33', padding: '12px 16px', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '24px' }}>
             ⚠️ {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} id="add-menu-form">
-          <div className="form-group">
-            <label htmlFor="item-name">Item Name</label>
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+              Item Name
+            </label>
             <input
               type="text"
-              id="item-name"
               name="name"
-              className="form-input"
-              placeholder="e.g. Paneer Tikka"
+              placeholder="e.g. Truffle Mushroom Risotto"
               value={form.name}
               onChange={handleChange}
               required
+              style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.9rem' }}
             />
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="item-price">Price (₹)</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+                Price ($/₹)
+              </label>
               <input
                 type="number"
-                id="item-price"
                 name="price"
-                className="form-input"
-                placeholder="250"
+                placeholder="28"
                 value={form.price}
                 onChange={handleChange}
                 required
                 min={0}
+                style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.9rem' }}
               />
             </div>
-            <div className="form-group">
-              <label htmlFor="item-taste">Taste</label>
+            <div>
+              <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+                Taste Profile
+              </label>
               <select
-                id="item-taste"
                 name="taste"
-                className="form-input"
                 value={form.taste}
                 onChange={handleChange}
                 required
+                style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.9rem' }}
               >
-                <option value="">Select taste</option>
+                <option value="">Select Taste</option>
                 <option value="sweet">Sweet</option>
                 <option value="salty">Salty</option>
                 <option value="sour">Sour</option>
@@ -119,53 +122,53 @@ export default function AddMenuPage() {
             </div>
           </div>
 
-          <div className="form-group">
-            <label htmlFor="item-ingredients">Ingredients (comma-separated)</label>
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+              Ingredients (comma-separated)
+            </label>
             <input
               type="text"
-              id="item-ingredients"
               name="ingredients"
-              className="form-input"
-              placeholder="paneer, spices, onion, capsicum"
+              placeholder="wild mushroom, arborio rice, truffle oil, parmesan"
               value={form.ingredients}
               onChange={handleChange}
+              style={{ width: '100%', padding: '12px 16px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', outline: 'none', fontSize: '0.9rem' }}
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="item-photo">Photo</label>
+          <div style={{ marginBottom: '24px' }}>
+            <label style={{ display: 'block', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '600' }}>
+              Photo Upload (Optional)
+            </label>
             <input
               type="file"
-              id="item-photo"
-              className="form-input"
               accept="image/*"
               onChange={(e) => setPhoto(e.target.files[0])}
-              style={{ padding: '10px' }}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: 'var(--radius-pill)', border: '1px solid var(--border-strong)', background: '#ffffff', fontSize: '0.85rem' }}
             />
           </div>
 
-          <div className="form-group" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ marginBottom: '28px', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <input
               type="checkbox"
               id="item-is-drink"
               name="is_drink"
               checked={form.is_drink}
               onChange={handleChange}
-              style={{ width: '18px', height: '18px', accentColor: 'var(--accent)' }}
+              style={{ width: '18px', height: '18px', cursor: 'pointer', accentColor: 'var(--text-dark)' }}
             />
-            <label htmlFor="item-is-drink" style={{ margin: 0, textTransform: 'none', fontSize: '0.95rem' }}>
-              This is a drink
+            <label htmlFor="item-is-drink" style={{ fontSize: '0.88rem', color: 'var(--text-dark)', cursor: 'pointer' }}>
+              This item is a beverage / drink
             </label>
           </div>
 
           <button
             type="submit"
-            className="btn btn-primary"
+            className="btn-pill-solid"
             disabled={loading}
-            id="add-menu-submit"
-            style={{ width: '100%' }}
+            style={{ width: '100%', padding: '14px', cursor: 'pointer' }}
           >
-            {loading ? 'Adding...' : '🍽️ Add to Menu'}
+            {loading ? 'PUBLISHING...' : 'PUBLISH DISH TO MENU'}
           </button>
         </form>
       </div>

@@ -1,110 +1,110 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api/api';
 
 export default function DashboardPage() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [menuCount, setMenuCount] = useState(0);
-  const [staffCounts, setStaffCounts] = useState({ chef: 0, waiter: 0, manager: 0 });
+  const [orderCount, setOrderCount] = useState(0);
 
   useEffect(() => {
-    // Fetch menu count
     api.get('/menu?limit=1').then((res) => {
       setMenuCount(res.data.pagination?.total || 0);
     }).catch(() => {});
 
-    // Fetch staff counts for each role
-    ['chef', 'waiter', 'manager'].forEach((role) => {
-      api.get(`/person/${role}?limit=1`).then((res) => {
-        setStaffCounts((prev) => ({
-          ...prev,
-          [role]: res.data.pagination?.total || 0,
-        }));
-      }).catch(() => {});
-    });
+    api.get('/order').then((res) => {
+      setOrderCount(res.data.length || 0);
+    }).catch(() => {});
   }, []);
 
   if (!user) {
     return (
-      <div className="loading">
-        <div className="spinner"></div>
+      <div style={{ textAlign: 'center', padding: '100px', color: 'var(--text-muted)' }}>
+        Loading dashboard...
       </div>
     );
   }
 
-  const initials = user.name
-    ? user.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
-    : '?';
-
-  const totalStaff = staffCounts.chef + staffCounts.waiter + staffCounts.manager;
+  const getInitials = (name) =>
+    name
+      ? name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2)
+      : '?';
 
   return (
-    <div className="page-container">
+    <div className="section-container">
       {/* Profile Card */}
-      <div className="profile-card animate-in" id="profile-card">
-        <div className="profile-avatar">{initials}</div>
-        <div className="profile-details">
-          <h2>{user.name}</h2>
-          <p className="profile-meta">
-            @{user.username} &nbsp;·&nbsp; <span className="badge badge-role">{user.work}</span>
+      <div className="editorial-card" style={{ padding: '40px', background: 'var(--bg-cream)', marginBottom: '40px', display: 'flex', alignItems: 'center', gap: '32px' }}>
+        <div
+          style={{
+            width: '80px',
+            height: '80px',
+            borderRadius: '50%',
+            background: 'var(--text-dark)',
+            color: 'var(--bg-taupe)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '1.8rem',
+            fontFamily: 'var(--font-serif)',
+            fontWeight: '600'
+          }}
+        >
+          {getInitials(user.name)}
+        </div>
+        <div style={{ flex: 1 }}>
+          <h2 style={{ fontSize: '1.8rem', marginBottom: '6px' }}>{user.name}</h2>
+          <p style={{ fontSize: '0.85rem', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--accent-gold)', fontWeight: '600' }}>
+            {user.work} &nbsp;·&nbsp; @{user.username}
           </p>
-          <p className="profile-meta" style={{ marginTop: '4px' }}>
-            {user.email} &nbsp;·&nbsp; {user.mobile}
+          <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+            {user.email} &nbsp;•&nbsp; {user.mobile}
           </p>
         </div>
+        <button
+          className="btn-pill-outline"
+          onClick={() => { logout(); navigate('/login'); }}
+        >
+          LOGOUT
+        </button>
       </div>
 
-      {/* Stats */}
-      <div className="page-header animate-in stagger-1">
-        <h1>Dashboard</h1>
-        <p>Overview of your hotel operations</p>
+      {/* Quick Links */}
+      <div className="editorial-header" style={{ marginBottom: '32px' }}>
+        <h2>RESTAURANT MANAGEMENT</h2>
       </div>
 
-      <div className="stats-row">
-        <div className="stat-card animate-in stagger-2" id="stat-menu">
-          <div className="stat-value">{menuCount}</div>
-          <div className="stat-label">Menu Items</div>
-        </div>
-        <div className="stat-card animate-in stagger-3" id="stat-staff">
-          <div className="stat-value">{totalStaff}</div>
-          <div className="stat-label">Total Staff</div>
-        </div>
-        <div className="stat-card animate-in stagger-4" id="stat-chefs">
-          <div className="stat-value">{staffCounts.chef}</div>
-          <div className="stat-label">Chefs</div>
-        </div>
-        <div className="stat-card animate-in stagger-5" id="stat-waiters">
-          <div className="stat-value">{staffCounts.waiter}</div>
-          <div className="stat-label">Waiters</div>
-        </div>
-      </div>
-
-      {/* Quick Actions */}
-      <div className="page-header animate-in stagger-5">
-        <h2 style={{ fontSize: '1.3rem' }}>Quick Actions</h2>
-      </div>
-
-      <div className="card-grid animate-in stagger-6" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))' }}>
-        <Link to="/menu" className="glass-card" id="action-menu" style={{ textDecoration: 'none' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '8px' }}>🍽️</div>
-          <h4>Browse Menu</h4>
-          <p style={{ fontSize: '0.85rem' }}>View all dishes & drinks</p>
-        </Link>
-
-        <Link to="/staff" className="glass-card" id="action-staff" style={{ textDecoration: 'none' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '8px' }}>👥</div>
-          <h4>View Staff</h4>
-          <p style={{ fontSize: '0.85rem' }}>See team by role</p>
-        </Link>
-
-        {user.work === 'manager' && (
-          <Link to="/menu/add" className="glass-card" id="action-add-menu" style={{ textDecoration: 'none' }}>
-            <div style={{ fontSize: '2rem', marginBottom: '8px' }}>➕</div>
-            <h4>Add Menu Item</h4>
-            <p style={{ fontSize: '0.85rem' }}>Create a new dish</p>
+      <div className="menu-grid">
+        {(user?.role === 'manager' || user?.work === 'manager') && (
+          <Link to="/menu/add" style={{ textDecoration: 'none' }}>
+            <div className="editorial-card" style={{ padding: '32px', background: 'var(--text-dark)', color: 'var(--bg-cream)' }}>
+              <h3 style={{ fontSize: '1.4rem', marginBottom: '8px', color: '#ffffff' }}>➕ Add Menu Item</h3>
+              <p style={{ fontSize: '0.9rem', color: 'var(--accent-gold)' }}>Create & publish new dishes</p>
+            </div>
           </Link>
         )}
+
+        <Link to="/menu" style={{ textDecoration: 'none' }}>
+          <div className="editorial-card" style={{ padding: '32px' }}>
+            <h3 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>Menu Directory</h3>
+            <p style={{ fontSize: '0.9rem' }}>{menuCount} dishes active</p>
+          </div>
+        </Link>
+
+        <Link to="/kitchen" style={{ textDecoration: 'none' }}>
+          <div className="editorial-card" style={{ padding: '32px' }}>
+            <h3 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>Kitchen Queue</h3>
+            <p style={{ fontSize: '0.9rem' }}>{orderCount} orders in queue</p>
+          </div>
+        </Link>
+
+        <Link to="/staff" style={{ textDecoration: 'none' }}>
+          <div className="editorial-card" style={{ padding: '32px' }}>
+            <h3 style={{ fontSize: '1.4rem', marginBottom: '8px' }}>Staff Roster</h3>
+            <p style={{ fontSize: '0.9rem' }}>View team by role</p>
+          </div>
+        </Link>
       </div>
     </div>
   );

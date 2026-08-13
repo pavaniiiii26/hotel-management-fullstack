@@ -50,6 +50,14 @@ const personSchema = new mongoose.Schema({
     minlength: [3, 'Username must be at least 3 characters'],
     maxlength: [30, 'Username cannot exceed 30 characters']
   },
+  role: {
+    type: String,
+    enum: {
+      values: ['staff', 'manager'],
+      message: 'Role must be either staff or manager'
+    },
+    default: 'staff'
+  },
   password: {
     type: String,
     required: [true, 'Password is required'],

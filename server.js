@@ -10,7 +10,9 @@ import rateLimit from 'express-rate-limit';
 
 import db from './db.js';
 import personRoutes from './routes/personRoutes.js';
+import profileRoutes from './routes/profileRoutes.js';
 import menuRoutes from './routes/menuRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 
 // Load env variables FIRST before anything else
 
@@ -59,7 +61,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/person', personRoutes);
+app.use('/profile', profileRoutes);
 app.use('/menu', menuRoutes);
+app.use('/order', orderRoutes);
 
 // 404 handler — catches any route that doesn't match above
 app.use((req, res) => {
