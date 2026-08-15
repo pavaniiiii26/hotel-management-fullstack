@@ -30,7 +30,7 @@ REQUIRED_ENV.forEach((key) => {
 
 // CORS — allow React dev server
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: ['http://localhost:5173', 'https://hotel-management-fullstack-tau.vercel.app'],
   credentials: true
 }));
 
