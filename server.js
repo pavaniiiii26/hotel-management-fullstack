@@ -38,7 +38,7 @@ app.use(cors({
 app.use(helmet());
 
 // Parse JSON bodies
-app.use(express.json());
+app.use(express.json({ limit: '10mb' }));
 
 // Request logger middleware
 const logRequest = (req, res, next) => {
