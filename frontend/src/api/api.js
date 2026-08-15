@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: '/',
+  baseURL: 'https://hotel-management-zesty.onrender.com',
 });
 
 // Request interceptor — attach JWT token to every request
