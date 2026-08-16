@@ -2,6 +2,8 @@
 
 An editorial, full-stack hotel and restaurant management web application built with **Node.js, Express, MongoDB, and React (Vite)**. Featuring role-based access control (RBAC), real-time kitchen order dispatching, menu management, and team directory views.
 
+https://hotel-management-fullstack-tau.vercel.app/ 
+
 ---
 
 ## ✨ Features
@@ -157,4 +159,3 @@ Developed by **Pavani Patel**
 📞 Contact: **+91 9588655454**  
 ✉️ Email: `reservations@zestyrestaurant.com`
  Every decision in this project was made with a real-world use case in mind.
-This is the backend foundation for a fullstack restaurant management application. The React frontend and deployment are currently in progress.
